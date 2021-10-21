@@ -1,7 +1,7 @@
 
 public class Parser {
 	
-	private static String input = "a = b;  if{a>=c}(b+c)else(a*b/3)"; //should replace with input file
+	private static String input = "a = b;  if(a>=c){b=b+c;}else{a=a*b/3;}"; //should replace with input file
 	private static int index = -1;
 
 	public static void main(String[] args) {
@@ -33,11 +33,11 @@ public class Parser {
 				else if( c == '!')				state = 13;
 				else if( c == '<')				state = 15;
 				else if( c == '>')				state = 18;
-				else if( c == '*')				state = 22;
-				else if( c == '/')				state = 23;
-				else if( c == '%')				state = 24;
-				else if( c == '+')				state = 25;
-				else if( c == '1')				state = 26;
+				else if( c == '*')				state = 21;
+				else if( c == '/')				state = 22;
+				else if( c == '%')				state = 23;
+				else if( c == '+')				state = 24;
+				else if( c == '-')				state = 25;
 				break;
 			
 			//ID's
@@ -47,7 +47,7 @@ public class Parser {
 				else								state = 2;
 				break;
 			case 2:
-				retract();
+				c = retract();
 				return new Token(getToken(), installID());
 			//Numbers
 			case 3:
@@ -57,7 +57,7 @@ public class Parser {
 				break;
 				
 			case 4:
-				retract();
+				c = retract();
 				return new Token(CONSTANT.NUM, numValue(c));
 				
 			case 5:
@@ -74,6 +74,70 @@ public class Parser {
 				
 			case 9:
 				return new Token(CONSTANT.SEMICOL, 0);
+			
+			// if c is =
+			case 10:
+				c = nextChar();
+				if( c == '=') 	state = 12;
+				else			state = 11;
+				break;
+			case 11:
+				c = retract();
+				return new Token(CONSTANT.ASSIGNOP, CONSTANT.EQUAL);
+				
+			case 12:
+				return new Token(CONSTANT.COMPAREOP, CONSTANT.EQUALEQ);
+			
+			//c = !
+			case 13:
+				c = nextChar();
+				if( c == '=') 	state = 14;
+				break;
+			case 14:
+				return new Token(CONSTANT.COMPAREOP, CONSTANT.NOTEQUAL);
+			
+			//c = <
+			case 15: 
+				c = nextChar();
+				if( c == '=') 	state = 17;
+				else			state = 16;
+				break;
+				
+			case 16:
+				c = retract();
+				return new Token(CONSTANT.COMPAREOP, CONSTANT.LSTHAN);
+				
+			case 17:
+				return new Token(CONSTANT.COMPAREOP, CONSTANT.LSTHANEQ);
+				
+			//c = >
+			case 18: 
+				c = nextChar();
+				if( c == '=') 	state = 20;
+				else			state = 19;
+				break;
+					
+			case 19:
+				c = retract();
+				return new Token(CONSTANT.COMPAREOP, CONSTANT.GRTHAN);
+					
+			case 20:
+				return new Token(CONSTANT.COMPAREOP, CONSTANT.GRTHANEQ);
+				
+			case 21:
+				return new Token(CONSTANT.ARITHOP, CONSTANT.MULT);
+				
+			case 22:
+				return new Token(CONSTANT.ARITHOP, CONSTANT.DIV);
+				
+			case 23:
+				return new Token(CONSTANT.ARITHOP, CONSTANT.MOD);
+				
+			case 24:
+				return new Token(CONSTANT.ARITHOP, CONSTANT.ADD);
+				
+			case 25:
+				return new Token(CONSTANT.ARITHOP, CONSTANT.SUB);
 			}
 		}
 		
@@ -84,8 +148,9 @@ public class Parser {
 		return input.charAt(index);
 	}
 	
-	private static void retract() {
+	private static char retract() {
 		index--;
+		return input.charAt(index);
 	}
 	
 	private static int numValue(char c) {

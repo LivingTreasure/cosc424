@@ -8,6 +8,9 @@ public final class CONSTANT {
 	public static final int LPAREN 		= 104;
 	public static final int RPAREN 		= 105;
 	public static final int SEMICOL 	= 106;
+	public static final int ASSIGNOP	= 107;
+	public static final int COMPAREOP	= 108;
+	public static final int ARITHOP		= 109;
 	
 	//ARITHOP attributes
 	public static final int MULT = 201;
