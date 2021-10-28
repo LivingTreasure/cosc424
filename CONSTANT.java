@@ -1,3 +1,10 @@
+/*
+ * CONSTANT.java
+ * Project 1 COSC 424
+ * @author Neil Yoder, Jacob Neulight, Elliot Cole
+ * 
+ * Holds all of the constant values and keywords for a given language
+ */
 public final class CONSTANT {
 	
 	//Tokens
@@ -19,7 +26,7 @@ public final class CONSTANT {
 	public static final int ADD = 204;
 	public static final int SUB = 205;
 	
-	//ASSIGNOP attributes
+	//ASSIGNOP and COMPAREOP attributes
 	public static final int EQUAL = 301;
 	public static final int EQUALEQ= 302;
 	public static final int NOTEQUAL = 303;

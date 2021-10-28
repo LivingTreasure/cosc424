@@ -1,20 +1,28 @@
+/*
+ * Parser.java
+ * Project 1 COSC 424
+ * @author Neil Yoder, Jacob Neulight, Elliot Cole
+ * 
+ * Parses the input data from a file and prints out the token value and index/attribute data
+ * 
+ */
 import java.io.File;
-import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Map.Entry;
 
 public class Parser {
 	private static String input = "";
 	private static int index = -1;
+	//creates the symbol table
 	private static LinkedHashMap<String, Integer> symbolTable;
 
 	public static void main(String[] args) {
 		symbolTable = new LinkedHashMap<>();
 		Token t = new Token();
 
+		//inserts keywords into the symbol table
 		symbolTable.put("if", CONSTANT.IF);
 		symbolTable.put("else", CONSTANT.ELSE);
 		symbolTable.put("double", CONSTANT.DOUBLE);
@@ -22,13 +30,17 @@ public class Parser {
 		symbolTable.put("int", CONSTANT.INT);
 		symbolTable.put("while", CONSTANT.WHILE);
 
-		File file = new File("C:\\Users\\jrneu\\Documents\\Code\\cosc424\\input.txt");
+		//cycle through a given input file, be sure to change path to your local machine!!!
+		File file = new File("C:\\Users\\Neil Yoder\\eclipse-workspace\\cosc424proj1\\src\\input.txt");
 		try {
 			Scanner sc = new Scanner(file);
 
 			while (sc.hasNextLine()){
 				input += sc.nextLine();
 			}
+			
+			input = input.trim();
+			
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 		}
@@ -42,9 +54,8 @@ public class Parser {
 
 	private static Token nextToken() {
 		int state = 0;
-		char c = ' ';
-		String lexeme = "";
-		char x = ' ';
+		char c = ' '; //this is the current character
+		String lexeme = ""; //this keeps track of longer Id's, keywords, and numbers
 		while(true) {
 			switch(state) {
 			case 0:
@@ -73,7 +84,6 @@ public class Parser {
 			//ID's
 			case 1:
 				c = nextChar();
-				
 				lexeme += c;
 
 				if(Character.isLetterOrDigit(c)) 	state = 1;
@@ -87,13 +97,17 @@ public class Parser {
 			//Numbers
 			case 3:
 				c = nextChar();
+				lexeme += c;
+				
 				if(Character.isDigit(c))	state = 3;
 				else						state = 4;
 				break;
 				
 			case 4:
 				c = retract();
-				return new Token(CONSTANT.NUM, numValue(c));
+				lexeme = lexeme.substring(0,lexeme.length()-1);
+				
+				return new Token(CONSTANT.NUM, numValue(lexeme));
 				
 			case 5:
 				return new Token(CONSTANT.LBRACKET, 0);
@@ -179,38 +193,45 @@ public class Parser {
 	}
 
 	private static char nextChar() {
+		//moves counter forward to next character
 		index++;
 		return input.charAt(index);
 	}
 	
 	private static char retract() {
+		//retracts the counter back as to not include extra chars
 		index--;
 		return input.charAt(index);
 	}
 	
-	private static int numValue(char c) {
-		return Character.getNumericValue(c);
+	private static int numValue(String lexeme) {
+		//returns integer value of the number found
+		return Integer.parseInt(lexeme.trim());
 	}
 	
 	private static int getToken(String lexeme) {
 		Integer attribute = symbolTable.get(lexeme.trim());
+		//checks if lexeme is in symbol table
 		if(attribute != null) {
 			return attribute;
 		}
 
-
-		symbolTable.put(lexeme, CONSTANT.ID);
+		//adds lexeme if not already in symbol table
+		symbolTable.put(lexeme.trim(), CONSTANT.ID);
 		return CONSTANT.ID;
 	}
 	
 	private static int installID(String lexeme) {
+		//This will cycle through the symbol table to find the correct index
 		List<String> keys = new ArrayList<String>(symbolTable.keySet());
 		for (int i = 0; i < keys.size(); i++) {
 			String obj = keys.get(i);
 			if(obj.equals(lexeme.trim()))
+				//returns index
 				return i;
 		}
 		
+		//This indicates an error
 		return -1;
 	}
 

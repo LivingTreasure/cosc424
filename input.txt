@@ -1,1 +1,19 @@
-a = b;  if(a>=c){b=b+c;}else{a=a*b/3;}
+char a;
+double c;
+int b;
+
+a = b;
+if(a >= c){
+    b = b + c;
+}
+else{
+    a = a * b / 3;
+}
+
+while(a == b){
+    b % c;
+    b - a;
+    c * 128;
+}
+
+     
