@@ -1,27 +1,57 @@
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Scanner;
+import java.util.Map.Entry;
 
 public class Parser {
-	
-	private static String input = "a = b;  if(a>=c){b=b+c;}else{a=a*b/3;}"; //should replace with input file
+	private static String input = "";
 	private static int index = -1;
+	private static LinkedHashMap<String, Integer> symbolTable;
 
 	public static void main(String[] args) {
+		symbolTable = new LinkedHashMap<>();
 		Token t = new Token();
+
+		symbolTable.put("if", CONSTANT.IF);
+		symbolTable.put("else", CONSTANT.ELSE);
+		symbolTable.put("double", CONSTANT.DOUBLE);
+		symbolTable.put("char", CONSTANT.CHAR);
+		symbolTable.put("int", CONSTANT.INT);
+		symbolTable.put("while", CONSTANT.WHILE);
+
+		File file = new File("C:\\Users\\jrneu\\Documents\\Code\\cosc424\\input.txt");
+		try {
+			Scanner sc = new Scanner(file);
+
+			while (sc.hasNextLine()){
+				input += sc.nextLine();
+			}
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		}
 		
 		while(index < input.length() -1) {
 			t = nextToken();
 			
 			System.out.printf("%6d %6d\n", t.getToken(), t.getAttribute());
 		}
-
 	}
 
 	private static Token nextToken() {
 		int state = 0;
 		char c = ' ';
+		String lexeme = "";
+		char x = ' ';
 		while(true) {
 			switch(state) {
 			case 0:
 				c = nextChar();
+				
+				lexeme += c;
+				
 				if(Character.isLetter(c))		state = 1;
 				else if(Character.isDigit(c))	state = 3;
 				else if( c == '{')				state = 5;
@@ -43,12 +73,17 @@ public class Parser {
 			//ID's
 			case 1:
 				c = nextChar();
+				
+				lexeme += c;
+
 				if(Character.isLetterOrDigit(c)) 	state = 1;
 				else								state = 2;
 				break;
 			case 2:
 				c = retract();
-				return new Token(getToken(), installID());
+				lexeme = lexeme.substring(0,lexeme.length()-1);
+				
+				return new Token(getToken(lexeme), installID(lexeme));
 			//Numbers
 			case 3:
 				c = nextChar();
@@ -157,17 +192,26 @@ public class Parser {
 		return Character.getNumericValue(c);
 	}
 	
-	private static int getToken() {
-		//TODO
-		//should check if lexeme exists in symbol table, will add if it does not exist
-		//return attribute
+	private static int getToken(String lexeme) {
+		Integer attribute = symbolTable.get(lexeme.trim());
+		if(attribute != null) {
+			return attribute;
+		}
+
+
+		symbolTable.put(lexeme, CONSTANT.ID);
 		return CONSTANT.ID;
 	}
 	
-	private static int installID() {
-		//TODO
-		//finds a given lexeme and returns index of it in the symbol table
-		return 0;
+	private static int installID(String lexeme) {
+		List<String> keys = new ArrayList<String>(symbolTable.keySet());
+		for (int i = 0; i < keys.size(); i++) {
+			String obj = keys.get(i);
+			if(obj.equals(lexeme.trim()))
+				return i;
+		}
+		
+		return -1;
 	}
 
 }
