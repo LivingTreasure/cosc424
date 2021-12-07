@@ -6,8 +6,8 @@ public class parser {
 	static int[][] action = {
 		          // id, while, ( , ), relop, addop, assignop, multop, num, $
 		/** 1 **/ {   4, 5,     9,   0, 0,     0,     0,        0,      0,   0},
-		/** 2 **/ {   0, 0,     0,   0, 0,     0,     0,        0,      0,   -1},
-		/** 3 **/ {   0, 0,     0,   0, 0,     0,     0,        0,      0,   -2},
+		/** 2 **/ {   0, 0,     0,   0, 0,     0,     0,        0,      0,   999},
+		/** 3 **/ {   0, 0,     0,   0, 0,     0,     0,        0,      0,   999},
 		/** 4 **/ {   0, 0,     0, -10, -10,  -10,    10,       0,      0,   -10},
 		/** 5 **/ {   0, 0,     11,  0, 0,     0,     0,        0,      0,   0},
 		/** 6 **/ {   0, 0,     0,   0, 12,    16,     0,       0,      0,   0},
@@ -140,17 +140,18 @@ public class parser {
 	
 	// constant declarations
 	private static final int ID     	= 0;
-	private static final int ADDOP  	= 1;
-	private static final int MULOP  	= 2;
+	private static final int WHILE     	= 1;
+	private static final int RELOP     	= 2;
 	private static final int ASSIGNOP  	= 3;
-	private static final int LPAREN 	= 4;
-	private static final int RPAREN 	= 5;
-	private static final int SEMICOLON 	= 6;
-	private static final int NUM 		= 7;
-	private static final int DOLLAR 	= 8;
+	private static final int NUM 		= 4;
+	private static final int ADDOP  	= 5;
+	private static final int MULOP  	= 6;
+	private static final int LPAREN 	= 7;
+	private static final int RPAREN 	= 8;
+	private static final int DOLLAR 	= 9;
 		
 	// input symbols � represents terminals
-	private static final String[] symbols = { "id", "+", "*", "(", ")", "$" };
+	private static final String[] symbols = { "id", "while", "==", "=", "num", "+", "*", "(", ")", "$" };
 
 	// input string       for example:   x     *    y     +    z     $
 	private static int[] inputString = { ID, MULOP, ID, ADDOP, ID, DOLLAR };
