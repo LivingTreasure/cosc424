@@ -1,3 +1,10 @@
+/*
+ * Neil Yoder, Jacob Neulight, Elliot Cole
+ * COSC 424, Project 2
+ * parser.java
+ * 
+ */
+
 import java.util.Stack;
 
 public class parser {
@@ -25,7 +32,7 @@ public class parser {
 		/** 17 **/ {   0,  0,   0, -8,  -8,    -8,     0,       -8,      0,  -8},
 		/** 18 **/ {   0,  0,   0, -10,  -10,  -10,    0,      -10,      0,  -10},
 		/** 19 **/ {   0,  0,   0,  20,  0,     0,     0,        0,      0,   0},
-		/** 20 **/ {   0,  0,   0,  0,   0,     0,     0,        0,      0,   0},
+		/** 20 **/ {   3,  4,   0,  0,   0,     0,     0,        0,      0,   0},
 		/** 21 **/ {   0,  0,   0,  0,   0,     0,     0,        0,      0,  -4},
 		/** 22 **/ {   0,  0,   0, -5,   0,    15,     0,        0,      0,  -5},
 		/** 23 **/ {   0,  0,   0, -6,  -6,   -6,     0,        11,     0,  -6},
@@ -55,7 +62,7 @@ public class parser {
 		/** 18 */	{  -1, 	-1, 	-1, 	-1,		-1, 	-1, 	-1},
 		/** 19 */	{  -1, 	-1, 	-1, 	-1,		-1, 	-1, 	-1},
 		/** 20 */	{  -1, 	-1, 	-1, 	-1,		-1, 	-1, 	-1},
-		/** 21 */	{  21, 	1,	 	2,	 	-1,		-1, 	-1, 	-1},
+		/** 21 */	{  21, 	 1,	 	 2,	 	-1,		-1, 	-1, 	-1},
 		/** 22 */	{  -1, 	-1, 	-1, 	-1,		-1, 	-1, 	-1},
 		/** 23 */	{  -1, 	-1, 	-1, 	-1,		-1, 	-1, 	-1},
 		/** 24 */	{  -1, 	-1, 	-1, 	-1,		-1, 	-1, 	-1},
@@ -159,7 +166,8 @@ public class parser {
 	//private static int[] inputString = { ID, ASSIGNOP, ID, DOLLAR };
 	//private static int[] inputString = { ID, ASSIGNOP, LPAREN, ID, RPAREN, DOLLAR };
 	//private static int[] inputString = { ID, ASSIGNOP, LPAREN, ID, ADDOP, NUM, RPAREN, DOLLAR };
-	private static int[] inputString = { ID, ASSIGNOP, LPAREN, ID, MULTOP, NUM, RPAREN, DOLLAR };
+	//private static int[] inputString = { ID, ASSIGNOP, LPAREN, ID, MULTOP, NUM, RPAREN, DOLLAR };
+	private static int[] inputString = { WHILE, LPAREN, ID, RELOP, NUM, RPAREN, ID, ASSIGNOP, LPAREN, ID, ADDOP, NUM, RPAREN, DOLLAR };
 
 	
 	
